@@ -21,7 +21,7 @@ void <B>jknn_init_param</B>(jknn_param <B>*param</B>, int <B>_n_dimension</B>, i
 void <B>jknn_free_param</B>(jknn_param <B>*param</B>);
 - Free memory spaces
 
-void <B>jknn_train</B>(jknn_param <B>*param</B>, double <B>**x</B>, char <B>**y</B>, int <B>data_length</B>);
+void <B>jknn_train</B>(jknn_param <B>*param</B>, double <B>**x</B>, double <B>**y</B>, int <B>data_length</B>);
 - Train parameters for neural network.
 - Its learning rate is already defined in <B>param->alpha</B> you can change it as you wish
 - <B>**x</B> : Training data. It has to have same dimension with [<B>n_dimension</B>]X[<B>data_length</B>]
