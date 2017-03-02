@@ -25,9 +25,12 @@ typedef struct jknn_param {
     double **wo;
 } jknn_param;
 
+double activation_sigmoid(double value);
+double activation_relu(double value);
+
 void jknn_init_param(jknn_param *param, int _n_dimension, int _n_hidden, int _n_class, double _alpha);
 void jknn_free_param(jknn_param *param);
 void jknn_classify(jknn_param *param, double* x, double* result);
 void jknn_train(jknn_param *param, double** x, double** y, int data_length);
-
+int jkGetArgMax(double *data, int n);
 #endif /* JKNeuralNet_h */

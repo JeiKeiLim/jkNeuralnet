@@ -8,6 +8,8 @@
 
 #include "JKNeuralNet.h"
 
+#define ACTIVATION(v) activation_sigmoid(v)
+
 void jknn_train(jknn_param *param, double** x, double** y, int length)
 {
     int i,j,k;
@@ -45,7 +47,7 @@ void jknn_train(jknn_param *param, double** x, double** y, int length)
             {
                 h[i][j] += x[i][k] * param->wh[k][j];
             }
-            h[i][j] = 1 / (1 + exp(-h[i][j]));
+            h[i][j] = ACTIVATION(h[i][j]);
             
             delta_h[i][j] = h[i][j] * (1-h[i][j]);  // Compute delta h here for optimization purpose
         }
@@ -60,7 +62,7 @@ void jknn_train(jknn_param *param, double** x, double** y, int length)
             {
                 o[i][j] += h[i][k] * param->wo[k][j];
             }
-            o[i][j] = 1 / (1 + exp(-o[i][j]));
+            o[i][j] = ACTIVATION(o[i][j]);
             
             out_error[i][j] = -y[i][j] + o[i][j]; // Compute out error here for optimization purpose
             
@@ -140,7 +142,7 @@ void jknn_classify(jknn_param *param, double* x, double* result)
         {
             h[i] += x[j] * param->wh[j][i];
         }
-        h[i] = 1 / (1 + exp(-h[i]));
+        h[i] = ACTIVATION(h[i]);
     }
     
     for(i=0; i<param->n_class; i++)
@@ -150,7 +152,7 @@ void jknn_classify(jknn_param *param, double* x, double* result)
         {
             result[i] += h[j] * param->wo[j][i];
         }
-        result[i] = 1 / (1 + exp(-result[i]));
+        result[i] = ACTIVATION(result[i]);
     }
 }
 
@@ -198,4 +200,34 @@ void jknn_free_param(jknn_param *param)
     
     free(param->wh);
     free(param->wo);
+}
+
+double activation_sigmoid(double value)
+{
+    return 1 / (1 + exp(-value));
+}
+
+double activation_relu(double value)
+{
+    if(value < 0)
+        return 0;
+    else
+        return value;
+}
+
+int jkGetArgMax(double *data, int n)
+{
+    int i;
+    int result = -1;
+    double max_value = 0;
+    for(i=0; i<n; i++)
+    {
+        if(max_value < data[i])
+        {
+            max_value = data[i];
+            result = i;
+        }
+    }
+    
+    return result;
 }
