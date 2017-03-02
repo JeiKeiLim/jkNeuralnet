@@ -8,19 +8,30 @@
 
 #include "JKNeuralNet.h"
 
-void jknn_train(jknn_param *param, double** x, char** y, int length)
+void jknn_train(jknn_param *param, double** x, double** y, int length)
 {
-    double h[length][param->n_hidden];      // hidden nodes
-    double o[length][param->n_class];       // output nodes
+    int i,j,k;
     
-    double out_error[length][param->n_class];   // output error
+    double **h = (double **)malloc(sizeof(double *)*length);        // hidden nodes
+    double **o = (double **)malloc(sizeof(double *)*length);        // output nodes
     
-    double delta_h[length][param->n_hidden];
-    double delta_o[length][param->n_class];
+    double **out_error = (double **)malloc(sizeof(double *)*length);    // output error
+    
+    double **delta_h = (double **)malloc(sizeof(double *)*length);
+    double **delta_o = (double **)malloc(sizeof(double *)*length);
+    
+    for(i=0; i<length; i++)
+    {
+        h[i] = (double *)malloc(sizeof(double)*param->n_hidden);
+        o[i] = (double *)malloc(sizeof(double)*param->n_class);
+        
+        out_error[i] = (double *)malloc(sizeof(double)*param->n_class);
+        
+        delta_h[i] = (double *)malloc(sizeof(double)*param->n_hidden);
+        delta_o[i] = (double *)malloc(sizeof(double)*param->n_class);
+    }
     
     double tmp;
-    
-    int i,j,k;
     
     for(i=0; i<length; i++)
     {
@@ -95,6 +106,25 @@ void jknn_train(jknn_param *param, double** x, char** y, int length)
             param->wh[i][j] -= param->alpha * tmp;
         }
     }
+    
+    for(i=0; i<length; i++)
+    {
+        free(h[i]);
+        free(o[i]);
+        
+        free(out_error[i]);
+        
+        free(delta_o[i]);
+        free(delta_h[i]);
+    }
+    
+    free(h);
+    free(o);
+    
+    free(out_error);
+    
+    free(delta_o);
+    free(delta_h);
 }
 
 void jknn_classify(jknn_param *param, double* x, double* result)
@@ -139,6 +169,8 @@ void jknn_init_param(jknn_param *param, int _n_dimension, int _n_hidden, int _n_
     
     double *_wh = Malloc(double, (param->n_dimension*param->n_hidden));
     double *_wo = Malloc(double, (param->n_hidden*param->n_class));
+    
+//    printf("n_dim : %d, n_hidden : %d, n_class : %d, wh length : %d, wo length : %d\n", _n_dimension, _n_hidden, _n_class, _n_dimension*_n_hidden, _n_hidden*_n_class);
     
     for(i=0; i<(param->n_dimension*param->n_hidden); i++)
     {

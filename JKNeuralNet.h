@@ -28,6 +28,6 @@ typedef struct jknn_param {
 void jknn_init_param(jknn_param *param, int _n_dimension, int _n_hidden, int _n_class, double _alpha);
 void jknn_free_param(jknn_param *param);
 void jknn_classify(jknn_param *param, double* x, double* result);
-void jknn_train(jknn_param *param, double** x, char** y, int data_length);
+void jknn_train(jknn_param *param, double** x, double** y, int data_length);
 
 #endif /* JKNeuralNet_h */
