@@ -44,13 +44,13 @@ jknn_init_param(&param, 2, 4, 2, 0.7);
 
 int i;
 
-double **x = Malloc(double *, 4);
-char **y = Malloc(char *, 4);
+double **x = (double **)malloc(sizeof(double *)*4);
+double **y = (double **)malloc(sizeof(double *)*4);
 
 for(i=0; i<4; i++)
 {
-  x[i] = Malloc(double, 4);
-  y[i] = Malloc(char, 2);
+  x[i] = (double *)malloc(sizeof(double)*4);
+  y[i] = (double *)malloc(sizeof(double)*2);
 }
 
 x[0][0] = 0;        x[0][1] = 0;
